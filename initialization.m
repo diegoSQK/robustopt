@@ -34,6 +34,6 @@ function [A,b_real,b_hat,err_signal] = initialization(months, horizon)
 
     err_signal=b_hat-b_real;
 
-    save('initialization');
+    %save('initialization');
 end
 
