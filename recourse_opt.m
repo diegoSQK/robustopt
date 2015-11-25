@@ -18,7 +18,7 @@ function [x,y,z,X,Y,Z] = recourse_opt(A, b_hat, B)
         variable z(horizon,1);
         variable Z(horizon, horizon) lower_triangular;
         maximize ( z(horizon) - c*sum(abs(Z),2) );
-        A*[x; y; z] >= b + sum(abs(A*[X;Y;Z]-B),2);
+        A*[x; y; z] >= b_hat + sum(abs(A*[X;Y;Z]-B),2);
         x <= 100 - sum(abs(X),2);
         x >= sum(abs(X),2);
         y >= sum(abs(Y),2);

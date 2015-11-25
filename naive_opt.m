@@ -11,7 +11,7 @@ function [x,y,z] = naive_opt(A, b_hat)
         variable y(horizon-3,1);
         variable z(horizon,1);
         maximize ( z(horizon) );
-        A*[x; y; z] == b;
+        A*[x; y; z] == b_hat;
         x <= 100;
         x >= 0;
         y >= 0;
