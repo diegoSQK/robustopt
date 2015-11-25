@@ -1,9 +1,10 @@
-function regret = simulate_opt(policy, horizon, order)
+function [regret, wealth] = simulate_opt(policy, horizon, order)
 % Inputs: 
 %   policy : 'simple' or 'recourse'
 %   horizon : Planning horizon for optimization
 %   order : Order of autoregressive model for uncertainty set recovery
 % Outputs: 
+%   wealth : Actual terminal wealth
 %   regret : Percentage distance from true optimality
 
     [past_pred, past_real] = generate_demand(100);
@@ -22,7 +23,7 @@ function regret = simulate_opt(policy, horizon, order)
         [x, y, z] = recourse_opt(A, b_hat, B);
     end
 
-    robust_wealth = z(end);
-    regret = 100*(opt_wealth - robust_wealth)/opt_wealth;
+    wealth = z(end);
+    regret = 100*(opt_wealth - wealth)/opt_wealth;
 end
 
