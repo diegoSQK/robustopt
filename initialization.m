@@ -29,20 +29,7 @@ function [A,b_real,b_hat,err_signal] = initialization(months, horizon)
         A_Z(i+1,i)=1.003;
     end
 
-    u = -1 + 2*rand(1,months);
-    b_profile = [150; 100; -200; 200; -50; -300];
-
-    b_hat = b_profile + normrnd(0,10,length(b_profile),1);
-    for i = 2:months/6
-        b_hat = [b_hat; b_profile + normrnd(0,10,length(b_profile),1)];
-    end
-
-    b_real=zeros(months,1);
-    b_real(1) = b_hat(1)*(1+0.06*u(1));
-    for i=2:months
-        b_real(i)=b_hat(i)*(1+0.06*u(i)+ 0.02*u(i-1));
-    end
-
+    [b_hat, b_real] = generate_demand(months);
     A=[A_X,A_Y,A_Z];
 
     err_signal=b_hat-b_real;
