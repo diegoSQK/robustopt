@@ -13,7 +13,7 @@ function [simple_worst, recourse_worst] = worstcase_regret(n, h)
     regret = [];
     wealth = [];
     for i = 1:n
-        [r, w] = simulate_opt('simple', h, 2);
+        [r, w] = simulate_opt(@simple_robust_opt, h, 2);
         regret = [regret, r];
         wealth = [wealth, w];
     end
@@ -22,7 +22,7 @@ function [simple_worst, recourse_worst] = worstcase_regret(n, h)
     regret = [];
     wealth = [];
     for i = 1:n
-        [r, w] = simulate_opt('recourse', h, 2);
+        [r, w] = simulate_opt(@recourse_opt, h, 2);
         regret = [regret, r];
         wealth = [wealth, w];
     end

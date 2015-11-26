@@ -1,6 +1,6 @@
 function [regret, wealth] = simulate_opt(policy, horizon, order)
 % Inputs: 
-%   policy : 'simple' or 'recourse'
+%   policy : function handle to optimization function
 %   horizon : Planning horizon for optimization
 %   order : Order of autoregressive model for uncertainty set recovery
 % Outputs: 
@@ -14,14 +14,7 @@ function [regret, wealth] = simulate_opt(policy, horizon, order)
 
     [x_opt, y_opt, z_opt] = naive_opt(A, b_real);
     opt_wealth = z_opt(end);
-
-    if strcmp(policy, 'simple')
-        [x, y, z] = simple_robust_opt(A, b_hat, B);
-    end
-
-    if strcmp(policy, 'recourse')
-        [x, y, z] = recourse_opt(A, b_hat, B);
-    end
+    [x, y, z] = policy(A, b_hat, B);
 
     wealth = z(end);
     regret = 100*(opt_wealth - wealth)/opt_wealth;
