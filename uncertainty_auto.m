@@ -1,4 +1,4 @@
-function B = uncertainty_auto(err_signal,n,p)
+function B = uncertainty_auto(err_signal,p,n)
 % Inputs: 
 %   err_signal : Entire known error signal so far
 %   p : Desired order of the autoregressive model

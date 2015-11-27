@@ -14,7 +14,7 @@ function [regret, wealth] = simulate_opt(policy, horizon, order)
     if nargin > 2
         B = uncertainty_auto(past_err, order, horizon);
     else
-        B = uncertainty_naive(past_real, horizon);
+        B = uncertainty_naive(past_real, horizon, 2);
     end
 
     [A, b_real, b_hat, err_signal] = initialization(horizon, horizon);
