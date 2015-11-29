@@ -32,7 +32,7 @@ function [regret, wealth] = simulate_opt(policy, horizon, n, order)
     [x_opt, y_opt, z_opt] = naive_opt(A, b_real);
     opt_wealth = z_opt(end);
     [x, y, z] = policy(A, b_hat, B);
-    wealth = z(end);
+
     
     regret = 100*(z(end)-opt_wealth)/opt_wealth;
 end

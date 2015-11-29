@@ -17,7 +17,7 @@ function [x,y,z,X,Y,Z] = recourse_opt(A, b_hat, B)
         variable Y(horizon-3, horizon) lower_triangular;
         variable z(horizon,1);
         variable Z(horizon, horizon) lower_triangular;
-        maximize ( z(horizon) - c*sum(abs(Z),2) );
+        maximize ( z(horizon) - c*sum(abs(Z),2));
         A*[x; y; z] >= b_hat + sum(abs(A*[X;Y;Z]-B),2);
         x <= 100 - sum(abs(X),2);
         x >= sum(abs(X),2);
@@ -27,5 +27,4 @@ function [x,y,z,X,Y,Z] = recourse_opt(A, b_hat, B)
         diag(Y) == 0;
         diag(Z) == 0;
     cvx_end
-
 end

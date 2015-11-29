@@ -21,3 +21,4 @@ function [x,y,z] = naive_opt(A, b_hat)
     cvx_end
 end
 
+var(

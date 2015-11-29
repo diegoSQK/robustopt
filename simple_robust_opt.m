@@ -8,7 +8,7 @@ function [x,y,z] = simple_robust_opt(A, b_hat, B)
 
     horizon = length(b_hat);
     b_rob = b_hat + sum(abs(B),2);
-    cvx_begin quiet
+    cvx_begin %quiet
         variable x(horizon-1,1);
         variable y(horizon-3,1);
         variable z(horizon,1);

@@ -1,7 +1,7 @@
 function B = uncertainty_naive(data, horizon, n)
 % Inputs:
 %   data : time series of real demand
-%   horizon : planning horizon length
+%   horizon : planning horizon length (moving window)
 %   n : Number of standard deviations to include in uncertainty
 % Outputs:
 %   B : Diagonal matrix encoding naive uncertainty set

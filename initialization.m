@@ -1,4 +1,4 @@
-function [A,b_real,b_hat,err_signal] = initialization(months, horizon)
+function [A,b_real,b_hat,err_signal,B] = initialization(months, horizon)
 % Inputs: 
 %   months : Total length of simulated data
 %   horizon : Planning horizon for optimization (defaults to 6)
@@ -12,14 +12,14 @@ function [A,b_real,b_hat,err_signal] = initialization(months, horizon)
         horizon = 6;
     end
         
-    A_X=eye(horizon);
+    A_X=eye(horizon-1);
     A_Y=eye(horizon-3);
     A_Z=-eye(horizon);
 
     for i=1:1:horizon-1
         A_X(i+1,i)=-1.01;
     end
-    A_X = A_X(:,1:end-1);
+    
 
     for i=1:1:horizon-3
         A_Y(i+3,i)=-1.02;
@@ -29,11 +29,11 @@ function [A,b_real,b_hat,err_signal] = initialization(months, horizon)
         A_Z(i+1,i)=1.003;
     end
 
-    [b_hat, b_real] = generate_demand(months);
+    [b_hat, b_real, B] = generate_demand(months);
     A=[A_X,A_Y,A_Z];
 
-    err_signal=b_hat-b_real;
+    err_signal=b_real-b_hat;
 
-    %save('initialization');
+    % save('initialization');
 end
 
