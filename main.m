@@ -18,6 +18,7 @@ clc
 [x,y,z] = simple_robust_opt(A, b_hat, B);
 %% Affine Recourse
 [x,y,z,X,Y,Z] = recourse_opt(A, b_hat, B);
+
 %% Uncertainty Naive
 data = [];
 for idx = 1:100
@@ -26,12 +27,12 @@ end
 data = data(:);
 B_uncertainty_naive = uncertainty_naive(data, 6, 1);
 %% Simulate Opt
-[regret, wealth] = simulate_opt(@simple_robust_opt, 6)
+[regret, wealth] = simulate_opt(@simple_robust_opt, 6);
 
 %% Worst Case Regret
-[simple_worst, recourse_worst] = worstcase_regret(5, 6)
+[simple_worst, recourse_worst] = worstcase_regret(5, 6);
 %% Average Case Regret
-[simple_avg, recourse_avg] = average_regret(5, 6)
+[simple_avg, recourse_avg] = average_regret(5, 6);
 
     
     
