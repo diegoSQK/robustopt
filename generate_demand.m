@@ -14,7 +14,7 @@ function [b_hat, b_real] = generate_demand(n)
     u = (-1 + 2*rand(1,n));
     
     phi = [0.6 0.3 0.1];
-    theta = [0.2 0.1]; 
+    theta = [0.4 0.2]; 
     
     b_real = b_hat(1:3) + u(1:3)'; 
     for t = 4:n
