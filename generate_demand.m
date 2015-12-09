@@ -4,21 +4,34 @@ function [b_hat, b_real] = generate_demand(n)
 % Outputs: 
 %   b_hat : Time series of estimated required net flow for all n
 %   b_real : True time series of net flow requirements for all n
-    u = -1 + 2*rand(1,n);
     b_profile = [150; 100; -200; 200; -50; -300];
-
     b_hat = b_profile + normrnd(0,10,length(b_profile),1);
     for i = 2:floor(n/6)+1
         b_hat = [b_hat; b_profile + normrnd(0,10,length(b_profile),1)];
     end
     b_hat = b_hat(1:n);
 
-    b_real=zeros(n,1);
-    b_real(1) = b_hat(1)*(1+0.06*u(1));
-    for i=2:n
-        a0 = normrnd(0.06, 0.005);
-        a1 = normrnd(0.02, 0.001);
-        b_real(i) = b_hat(i)*(1 + a0*u(i) + a1*u(i-1));
+    u = (-1 + 2*rand(1,n));
+    
+    phi = [0.6 0.3 0.1];
+    theta = [0.15 0.1]; 
+    
+    b_real = b_hat(1:3) + u(1:3)'; 
+    for t = 4:n
+        phi_n = phi + normrnd(0, 0.05, 1, 3);
+        theta_n = theta + normrnd(0, 0.03, 1, 2);
+
+        ar_sum = 0;
+        for i = 1:3
+            ar_sum = ar_sum + phi_n(i)*(b_real(t-i)-b_hat(t-i));
+        end
+
+        ma_sum = 0;
+        for i = 1:2
+            ma_sum = ma_sum + theta_n(i)*u(t-i); 
+        end
+
+        b_real(end+1) = b_hat(t) + ar_sum + ma_sum + u(t);
     end
 end
 

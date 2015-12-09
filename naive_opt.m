@@ -1,4 +1,4 @@
-function [x,y,z] = naive_opt(A, b_hat)
+function [x,y,z,wealth] = naive_opt(A, b_hat)
 % Inputs:
 %   A : Constraint matrix
 %   b_hat : Predicted flow requirements
@@ -17,4 +17,6 @@ function [x,y,z] = naive_opt(A, b_hat)
         y >= 0;
         z >= 0;
     cvx_end
+    
+    wealth = cvx_optval;
 end

@@ -1,4 +1,4 @@
-function [x,y,z] = simple_robust_opt(A, b_hat, B)
+function [x,y,z,wealth] = simple_robust_opt(A, b_hat, B)
 % Inputs:
 %   A : Constraint matrix
 %   b_hat : Predicted flow requirements
@@ -19,5 +19,7 @@ function [x,y,z] = simple_robust_opt(A, b_hat, B)
         y >= 0;
         z >= 0;
     cvx_end
+    
+    wealth = cvx_optval;
 end
 

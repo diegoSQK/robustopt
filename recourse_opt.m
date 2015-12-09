@@ -1,4 +1,4 @@
-function [x,y,z,X,Y,Z] = recourse_opt(A, b_hat, B)
+function [x,y,z,X,Y,Z,wealth] = recourse_opt(A, b_hat, b_real, B)
 % Inputs:
 %   A : Constraint matrix
 %   b_hat : Predicted flow requirements
@@ -27,5 +27,10 @@ function [x,y,z,X,Y,Z] = recourse_opt(A, b_hat, B)
         diag(Y) == 0;
         diag(Z) == 0;
     cvx_end
-
+    
+    u = inv(B)*(b_real - b_hat);
+    v = [x;y;z];
+    V = [X;Y;Z];
+    reserve = (v + V*u);
+    wealth = reserve(end);
 end
