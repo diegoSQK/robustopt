@@ -1,4 +1,4 @@
-function [B, u, gamma, Theta] = uncertainty_arma(err_signal,Phi,u,p,q,n)
+function [B, u, gamma, Phi, Theta] = uncertainty_arma(err_signal,u,p,q,n)
 % Inputs: 
 %   err_signal : Past known error signal
 %   p : Desired order of the autoregressive model
@@ -9,16 +9,18 @@ function [B, u, gamma, Theta] = uncertainty_arma(err_signal,Phi,u,p,q,n)
 %   gamma : estimate for upper bound on uncertainty vector u
 
     k = length(err_signal);
+    rho = 0.0005;
 
     cvx_begin quiet
-        %variable Phi(k,k) lower_triangular toeplitz;
+        variable Phi(k,k) lower_triangular toeplitz;
         variable Theta(k,k) lower_triangular toeplitz;
-        minimize( norm(Phi*err_signal + Theta*u - err_signal) );
-        %diag(Phi) == 0;
+        %TODO: add regularization parameter
+        minimize( norm(Phi*err_signal + Theta*u - err_signal) + rho*norm(Theta, 'fro') );
+        diag(Phi) == 0;
         diag(Theta) == 0;
-        %for i = p+2:k
-        %    Phi(i,1) == 0;
-        %end
+        for i = p+2:k
+            Phi(i,1) == 0;
+        end
         for j = q+2:k
             Theta(j,1) == 0;
         end

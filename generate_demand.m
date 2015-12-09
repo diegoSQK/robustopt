@@ -14,12 +14,12 @@ function [b_hat, b_real] = generate_demand(n)
     u = (-1 + 2*rand(1,n));
     
     phi = [0.6 0.3 0.1];
-    theta = [0.15 0.1]; 
+    theta = [0.2 0.1]; 
     
     b_real = b_hat(1:3) + u(1:3)'; 
     for t = 4:n
-        phi_n = phi + normrnd(0, 0.05, 1, 3);
-        theta_n = theta + normrnd(0, 0.03, 1, 2);
+        phi_n = phi + normrnd(0, 0, 1, 3);
+        theta_n = theta + normrnd(0, 0, 1, 2);
 
         ar_sum = 0;
         for i = 1:3
