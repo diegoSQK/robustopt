@@ -1,9 +1,9 @@
 function [Phi, Theta, u, gamma] = recover_arma(err_signal, p, q)
     k = length(err_signal);
     s = 3*(p+q); 
-    [Phi, u, ~] = recover_ar(err_signal,s);
+    [~, u, ~] = recover_ar(err_signal,s);
     
-    for iter = 1:10
+    for iter = 1:50
         cvx_begin quiet
             variable Phi(k,k) lower_triangular toeplitz;
             variable Theta(k,k) lower_triangular toeplitz;
@@ -18,7 +18,12 @@ function [Phi, Theta, u, gamma] = recover_arma(err_signal, p, q)
             end
         cvx_end
 
-        u = inv(eye(k) + Theta)*(eye(k) - Phi)*err_signal;
+        u_new = pinv(eye(k) + Theta)*(eye(k) - Phi)*err_signal;
+        diff = max(abs(u - u_new));
+        if diff < 0.001
+            break;
+        end
+        u = u_new;
     end
 
     gamma = max(abs(u));
