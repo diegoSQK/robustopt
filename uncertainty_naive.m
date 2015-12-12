@@ -1,8 +1,8 @@
-function B = uncertainty_naive(data, horizon, n)
+function B = uncertainty_naive(data, horizon, rho)
 % Inputs:
 %   data : time series of real demand
 %   horizon : planning horizon length
-%   n : Number of standard deviations to include in uncertainty
+%   rho : scaling of standard deviations in output matrix
 % Outputs:
 %   B : Diagonal matrix encoding naive uncertainty set
 
@@ -12,6 +12,6 @@ function B = uncertainty_naive(data, horizon, n)
         data_matrix = [data_matrix, data_vector];
     end
     sigma = std(data_matrix, 1, 2);
-    B = diag(n*sigma);
+    B = rho*diag(sigma);
 end
 

@@ -1,4 +1,4 @@
-function [x,y,z,X,Y,Z,wealth] = recourse_opt(A, b_hat, b_real, B)
+function [x,y,z,X,Y,Z,wealth] = recourse_opt(A, b_hat, b_real, B, gamma)
 % Inputs:
 %   A : Constraint matrix
 %   b_hat : Predicted flow requirements
@@ -17,12 +17,12 @@ function [x,y,z,X,Y,Z,wealth] = recourse_opt(A, b_hat, b_real, B)
         variable Y(horizon-3, horizon) lower_triangular;
         variable z(horizon,1);
         variable Z(horizon, horizon) lower_triangular;
-        maximize ( z(horizon) - c*sum(abs(Z),2) );
-        A*[x; y; z] >= b_hat + sum(abs(A*[X;Y;Z]-B),2);
-        x <= 100 - sum(abs(X),2);
-        x >= sum(abs(X),2);
-        y >= sum(abs(Y),2);
-        z >= sum(abs(Z),2);
+        maximize ( z(horizon) - gamma*c*sum(abs(Z),2) );
+        A*[x; y; z] >= b_hat + gamma*sum(abs(A*[X;Y;Z]-B),2);
+        x <= 100 - gamma*sum(abs(X),2);
+        x >= gamma*sum(abs(X),2);
+        y >= gamma*sum(abs(Y),2);
+        z >= gamma*sum(abs(Z),2);
         diag(X) == 0;
         diag(Y) == 0;
         diag(Z) == 0;
