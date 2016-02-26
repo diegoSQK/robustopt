@@ -1,22 +1,18 @@
-function [x,y,z,wealth] = naive_opt(A, b_hat)
-% Inputs:
+function [x, optval] = naive_opt(c, A, b_hat)
+% Inputs
 %   A : Constraint matrix
-%   b_hat : Predicted flow requirements
+%   c : Linear objective coefficients
+%   b_hat : Predicted requirements
 % Outputs:
-%   x, y, z : Optimal decision variables (assuming no prediction error)
+%   x : Optimal decision variables (assuming no prediction error)
+%   optval : Optimal objective value
 
-    horizon = length(b_hat);
+    var_num = length(c);
     cvx_begin quiet
-        variable x(horizon-1,1);
-        variable y(horizon-3,1);
-        variable z(horizon,1);
-        maximize ( z(horizon) );
-        A*[x; y; z] == b_hat;
-        x <= 100;
-        x >= 0;
-        y >= 0;
-        z >= 0;
+        variable x(var_num,1);
+        maximize ( c'*x );
+        A*x >= b_hat;
     cvx_end
     
-    wealth = cvx_optval;
+    optval = cvx_optval;
 end

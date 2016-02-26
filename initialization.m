@@ -1,11 +1,11 @@
-function [A,b_real,b_hat,err_signal] = initialization(months, horizon)
+function [c, A, b_real, b_hat, err_signal] = initialization(time, horizon)
 % Inputs: 
-%   months : Total length of simulated data
+%   time : Total length of simulated data
 %   horizon : Planning horizon for optimization (defaults to 6)
 % Outputs: 
 %   A : Matrix encoding the cash-flow balance equations for a single planning horizon
-%   b_real : True time series of net flow requirements for all months
-%   b_hat : Time series of estimated required net flow for all months
+%   b_real : True time series of requirements
+%   b_hat : Time series of estimated requirements
 %   err_signal : Difference between b_real and b_hat
 
     if nargin < 2
@@ -29,10 +29,13 @@ function [A,b_real,b_hat,err_signal] = initialization(months, horizon)
         A_Z(i+1,i)=1.003;
     end
 
-    [b_hat, b_real] = generate_demand(months);
+    [b_hat, b_real] = generate_demand(time);
     A=[A_X,A_Y,A_Z];
 
     err_signal=b_hat-b_real;
+
+    var_num = size(A, 2);
+    c = rand(var_num, 1);
 
     %save('initialization');
 end

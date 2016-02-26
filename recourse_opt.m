@@ -1,36 +1,26 @@
-function [x,y,z,X,Y,Z,wealth] = recourse_opt(A, b_hat, b_real, B, gamma)
+function [x, X, optval] = recourse_opt(c, A, b_hat, b_real, B, gamma)
 % Inputs:
+%   c : Linear objective coefficients
 %   A : Constraint matrix
-%   b_hat : Predicted flow requirements
+%   b_hat : Predicted requirements
+%   b_real : True requirements, used to evaluate performance
+%   gamma : Bound on uncertainty
 %   B : Uncertainty matrix (b_real = b_hat + Bu)
 % Outputs:
-%   x,y,z,X,Y,Z : Decision variables and recourse matrices
+%   x,X : Decision variables and recourse matrix
+%   optval : Achieved objective value after revealed uncertainty
 
     horizon = length(b_hat);
-    c = zeros(1,horizon);
-    c(end) = 1;
+    num_var = length(c);
 
     cvx_begin quiet
-        variable x(horizon-1,1);
-        variable X(horizon-1,horizon) lower_triangular;
-        variable y(horizon-3,1);
-        variable Y(horizon-3, horizon) lower_triangular;
-        variable z(horizon,1);
-        variable Z(horizon, horizon) lower_triangular;
-        maximize ( z(horizon) - gamma*c*sum(abs(Z),2) );
-        A*[x; y; z] >= b_hat + gamma*sum(abs(A*[X;Y;Z]-B),2);
-        x <= 100 - gamma*sum(abs(X),2);
-        x >= gamma*sum(abs(X),2);
-        y >= gamma*sum(abs(Y),2);
-        z >= gamma*sum(abs(Z),2);
+        variable x(num_var,1);
+        variable X(num_var, horizon) lower_triangular;
+        maximize ( c'*( x - gamma*sum(abs(X),2)) );
+        A*x >= b_hat + gamma*sum(abs(A*X-B),2);
         diag(X) == 0;
-        diag(Y) == 0;
-        diag(Z) == 0;
     cvx_end
     
     u = inv(B)*(b_real - b_hat);
-    v = [x;y;z];
-    V = [X;Y;Z];
-    reserve = (v + V*u);
-    wealth = reserve(end);
+    optval = c*(x + X*u);
 end

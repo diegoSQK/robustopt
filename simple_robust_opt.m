@@ -1,23 +1,19 @@
-function [x,y,z,wealth] = simple_robust_opt(A, b_hat, B, gamma)
+function [x,optval] = simple_robust_opt(A, b_hat, B, gamma)
 % Inputs:
+%   c : Linear objective coeefficients
 %   A : Constraint matrix
 %   b_hat : Predicted flow requirements
 %   B : Uncertainty matrix (b_real = b_hat + Bu)
+%   gamma : Bound on uncertainty
 % Outputs:
-%   x,y,z : Decision variables for conservative robust solution
+%   x : Decision variables for conservative robust solution
 
-    horizon = length(b_hat);
-    b_rob = b_hat + gamma*sum(abs(B),2);
+    var_num = length(c);
+
     cvx_begin quiet
-        variable x(horizon-1,1);
-        variable y(horizon-3,1);
-        variable z(horizon,1);
-        maximize ( z(horizon) );
-        A*[x; y; z] >= b_rob;
-        x <= 100;
-        x >= 0;
-        y >= 0;
-        z >= 0;
+        variable x(var_num,1);
+        maximize ( c'*x );
+        A*x >= b_hat + gamma*sum(abs(B),2);
     cvx_end
     
     wealth = cvx_optval;
